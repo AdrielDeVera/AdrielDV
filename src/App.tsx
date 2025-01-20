@@ -142,6 +142,7 @@ function Home() {
 
 /////////////////////////////////////////////////
 ///    ABOUT ME SECTION                    /////
+///                                       ////
 ////////////////////////////////////////////////
 function About() {
   const navigate = useNavigate();
