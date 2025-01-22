@@ -206,9 +206,8 @@ function About() {
   
   <div className="space-y-8 text-[#4D2810]">
     <p className="text-xl leading-relaxed">
-      Adriel here, a Management Engineering student at uWaterloo with experience in software architecture, distributed systems, and full-stack development from internships in AI, aerospace, and engineering. 
-      I’m passionate about creating user-centric solutions at the intersection of people, software, and design while advocating for representation for minorities in tech, particularly the Filipino community. 
-      I love building communities, uplifting others, and am always excited to connect with new people!
+      Adriel here, a Management Engineering student at uWaterloo with experience in software architecture, distributed systems, and full-stack development. 
+      I’m passionate about creating user-centric solutions at the intersection of people, software, and design while advocating for representation for minorities in tech, particularly the Filipino community.
     </p>
     
     <div>
