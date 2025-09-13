@@ -2,13 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Github, Mail, Linkedin, Film, BookOpen, Globe, Bookmark, NotebookPen  } from 'lucide-react';
 
+// Responsive Image Component
+function ResponsiveImage({ src, alt, className = "", sizes = "100vw" }) {
+  return (
+    <img 
+      src={src}
+      alt={alt}
+      className={`object-cover w-full h-full hover:scale-105 transition-transform duration-300 ${className}`}
+      loading="lazy"
+      sizes={sizes}
+    />
+  );
+}
 
-import asci2 from './Images/ascii-art.svg'
-import EngAward from './Images/EngAward.jpg'
-import FSAbonFire from './Images/FSAbonFire.jpg'
-import i4bonFire from './Images/i4bonFire.jpg'
-import I4Resume from './Images/I4Resume.jpg'
-import PanelSpeaker from './Images/PanelSpeaker.jpg'
+
+import asci2 from './Images/webp/ascii-art.webp'
+import EngAward from './Images/webp/EngAward.webp'
+import FSAbonFire from './Images/webp/FSAbonFire.webp'
+import i4bonFire from './Images/webp/i4bonFire.webp'
+import I4Resume from './Images/webp/I4Resume.webp'
+import PanelSpeaker from './Images/webp/PanelSpeaker.webp'
 
 
 function AnimatedName() {
@@ -60,17 +73,17 @@ function Home() {
         </Link>
       </nav>
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-2 gap-12 max-w-7xl mx-auto">
+      {/* Main Grid Layout - Responsive */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
         {/* Top Left - Title Section */}
         <div className="space-y-8 mt-24 ">
           <div>
-            <p className="text-6xl font-bold text-[#2D1810] mb-4">
+            <p className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2D1810] mb-4">
               Home Base.
               <br />
               Adriel DV
             </p>
-            <p className="text-xl text-[#6D4810]">Busy Building Digital and Physical Networks</p>
+            <p className="text-lg sm:text-xl text-[#6D4810]">Busy Building Digital and Physical Networks</p>
           </div>
         </div>
 
@@ -79,8 +92,9 @@ function Home() {
           <img 
              src={asci2}
             alt="Workspace"
-            className="object-cover w-full h-full "
-          
+            className="object-cover w-full h-full"
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
 
@@ -159,44 +173,44 @@ function About() {
         </h2>
       </nav>
 
-      {/* Bento Box Photo Grid */}
-      <div className="grid grid-cols-4 grid-rows-2 gap-4 mb-16 max-w-4xl mx-auto h-[400px]">
+      {/* Bento Box Photo Grid - Responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-4 mb-16 max-w-4xl mx-auto h-[400px]">
         {/* Large feature image */}
-        <div className="col-span-2 row-span-2 rounded-2xl overflow-hidden">
-          <img 
+        <div className="col-span-1 sm:col-span-2 lg:col-span-2 row-span-2 rounded-2xl overflow-hidden">
+          <ResponsiveImage 
             src={EngAward}
             alt="Engineering workspace"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
         {/* Top right images */}
         <div className="rounded-2xl overflow-hidden">
-          <img 
+          <ResponsiveImage 
             src={FSAbonFire}
             alt="AI visualization"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
         <div className="rounded-2xl overflow-hidden">
-          <img 
+          <ResponsiveImage 
             src={PanelSpeaker}
             alt="Research lab"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
         {/* Bottom right images */}
         <div className="rounded-2xl overflow-hidden">
-          <img 
+          <ResponsiveImage 
             src={I4Resume}
             alt="Tech diagram"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
         <div className="rounded-2xl overflow-hidden">
-          <img 
+          <ResponsiveImage 
             src={i4bonFire}
             alt="Coding setup"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         </div>
       </div>
