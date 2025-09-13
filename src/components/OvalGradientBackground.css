@@ -1,0 +1,57 @@
+/* Fallback CSS for OvalGradientBackground component */
+/* Add this to src/index.css if Tailwind is not present */
+
+.oval-gradient-background {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(24px);
+  transition: all 0.3s ease;
+}
+
+/* Example usage with orange-pink-yellow gradient */
+.oval-gradient-orange-pink-yellow {
+  background: radial-gradient(ellipse at center, #ff7f50, #ff6bd6, #ffe08a, transparent 70%);
+}
+
+/* Example usage with blue-teal gradient */
+.oval-gradient-blue-teal {
+  background: radial-gradient(ellipse at center, #4ecdc4, #45b7d1, transparent 70%);
+}
+
+/* Example usage with pink-purple gradient */
+.oval-gradient-pink-purple {
+  background: radial-gradient(ellipse at center, #ff6b6b, #4ecdc4, #45b7d1, transparent 70%);
+}
+
+/* Responsive sizing utilities */
+.oval-gradient-sm {
+  width: 200px;
+  height: 200px;
+}
+
+.oval-gradient-md {
+  width: 400px;
+  height: 400px;
+}
+
+.oval-gradient-lg {
+  width: 600px;
+  height: 600px;
+}
+
+/* Opacity utilities */
+.oval-gradient-opacity-30 {
+  opacity: 0.3;
+}
+
+.oval-gradient-opacity-50 {
+  opacity: 0.5;
+}
+
+.oval-gradient-opacity-70 {
+  opacity: 0.7;
+}
+
+.oval-gradient-opacity-90 {
+  opacity: 0.9;
+}

@@ -1,9 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { Github, Mail, Linkedin, Film, BookOpen, Globe, Bookmark, NotebookPen  } from 'lucide-react';
+import { Github, Mail, Linkedin, BookOpen, Bookmark, NotebookPen  } from 'lucide-react';
+import DotGridBackground from './components/DotGridBackground';
+import { OvalGradientBackground } from './components/OvalGradientBackground';
+
+// Custom hook for scroll-based animations
+function useScrollAnimation() {
+  const [scrollY, setScrollY] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  return scrollY;
+}
+
+// TextBlock component with scroll-responsive background
+function TextBlock({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const scrollY = useScrollAnimation();
+  const blockRef = useRef<HTMLDivElement>(null);
+  const [blockTop, setBlockTop] = useState(0);
+  const [blockHeight, setBlockHeight] = useState(0);
+  
+  useEffect(() => {
+    if (blockRef.current) {
+      const rect = blockRef.current.getBoundingClientRect();
+      setBlockTop(rect.top + window.scrollY);
+      setBlockHeight(rect.height);
+    }
+  }, []);
+  
+  // Calculate which block should be "active" (rising)
+  const viewportCenter = scrollY + window.innerHeight / 2;
+  const blockCenter = blockTop + blockHeight / 2;
+  const distanceFromViewportCenter = Math.abs(viewportCenter - blockCenter);
+  
+  // Only the closest block to viewport center gets the rise effect
+  const isActive = distanceFromViewportCenter < window.innerHeight / 2;
+  
+  // Calculate animation values
+  const distanceFromTop = scrollY - blockTop;
+  const translateY = isActive ? Math.max(0, distanceFromTop * 0.15) : 0; // Only active block rises
+  const opacity = Math.max(0.8, 1 - distanceFromTop * 0.0003); // Consistent opacity
+  const scale = isActive ? Math.max(0.98, 1 - distanceFromTop * 0.00005) : 1; // Only active block scales
+  
+  return (
+    <div 
+      ref={blockRef}
+      className={`bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg transition-all duration-500 ${className}`}
+      style={{
+        transform: `translateY(${translateY}px) scale(${scale})`,
+        opacity: opacity,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 // Responsive Image Component
-function ResponsiveImage({ src, alt, className = "", sizes = "100vw" }) {
+function ResponsiveImage({ src, alt, className = "", sizes = "100vw" }: { src: string; alt: string; className?: string; sizes?: string }) {
   return (
     <img 
       src={src}
@@ -24,53 +82,45 @@ import I4Resume from './Images/webp/I4Resume.webp'
 import PanelSpeaker from './Images/webp/PanelSpeaker.webp'
 
 
-function AnimatedName() {
-  const [displayText, setDisplayText] = useState("Adriel");
-  const [isAnimating, setIsAnimating] = useState(false);
-  const names = ["Adriel", "Ivan", "DV"];
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsAnimating(true);
-      
-      // Wait for fade out, then change text
-      setTimeout(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % names.length);
-        setDisplayText(names[(index + 1) % names.length]);
-        setIsAnimating(false);
-      }, 300); // Half of the transition duration
-      
-    }, 2000); // Total time between changes
-
-    return () => clearInterval(timer);
-  }, [index]);
-
-  return (
-    <span 
-      className={`inline-block transition-all duration-600 transform
-        ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}
-      `}
-    >
-      {displayText}
-    </span>
-  );
-}
 
 function Home() {
   return (
-    <div className="min-h-screen bg-white p-8">
+    <DotGridBackground 
+      approach="css"
+      dotSize={1}
+      spacing={24}
+      dotColor="#707070"
+      className="min-h-screen bg-white p-8"
+    >
       {/* Navigation */}
       <nav className="flex justify-between items-center mb-16">
-        <h2 className="text-2xl text-[#2D1810] hover:font-bold transition-all cursor-pointer">
-          Adriel De Vera
-        </h2>
-        <Link 
-          to="/about" 
-          className="text-xl text-[#2D1810] hover:font-bold transition-all"
-        >
-          About Me
-        </Link>
+        <div className="relative group">
+          <OvalGradientBackground 
+            colors={['#ff7f50', '#ff6bd6', '#ffe08a']}
+            width="200px"
+            height="80px"
+            opacity={0.9}
+            className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <h2 className="relative z-10 text-2xl text-[#2D1810] hover:font-bold transition-all cursor-pointer px-4 py-2">
+            Adriel De Vera
+          </h2>
+        </div>
+        <div className="relative group">
+          <OvalGradientBackground 
+            colors={['#ff7f50', '#ff6bd6', '#ffe08a']}
+            width="150px"
+            height="60px"
+            opacity={0.9}
+            className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <Link 
+            to="/about" 
+            className="relative z-10 text-xl text-[#2D1810] hover:font-bold transition-all px-4 py-2 block"
+          >
+            About Me
+          </Link>
+        </div>
       </nav>
 
       {/* Main Grid Layout - Responsive */}
@@ -83,7 +133,27 @@ function Home() {
               <br />
               Adriel DV
             </p>
-            <p className="text-lg sm:text-xl text-[#6D4810]">Busy Building Digital and Physical Networks</p>
+            <p className="text-lg sm:text-xl text-[#6D4810]">
+              Busy Building{' '}
+              <a 
+                href="https://www.linkedin.com/posts/adrieldevera_this-summer-i-had-the-opportunity-to-attend-activity-7367583130926419968--dpa?utm_source=share&utm_medium=member_desktop&rcm=ACoAACrHC_sBslW5QfoUFxP-3fxxr6O4guIZr5A" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#6D4810] hover:text-[#2D1810] hover:underline transition-all duration-300 cursor-pointer"
+              >
+                Digital
+              </a>
+              {' '}and{' '}
+              <a 
+                href="https://www.linkedin.com/feed/update/urn:li:activity:7201963096356106243/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#6D4810] hover:text-[#2D1810] hover:underline transition-all duration-300 cursor-pointer"
+              >
+                Physical
+              </a>
+              {' '}Networks
+            </p>
           </div>
         </div>
 
@@ -102,10 +172,10 @@ function Home() {
         <div className="space-y-6">
           <h3 className="text-2xl font-bold text-[#2D1810]">Quick Intro</h3>
           <ul className="space-y-4 text-[#4D2810] ">
-            <li>🏫 3rd Year Engineer + Minor AI @ UWaterloo</li>
+            <li>🏫 4th Year Engineer + Minor AI @ UWaterloo</li>
             <li>🎓 Graduating Spring 2026</li>
-            <li>🤖 Experience in Software Architecture + Distributed Systems</li>
-            <li>🖥️ SWE Internships in Aerospace + Ai + IOT</li>
+            <li>🤖 Experience in AI + Software Architecture + Distributed Systems</li>
+            <li>🖥️ SWE Internships in Aerospace + AI + IOT</li>
             <li>📊 Research Assistant at the Behavioural Analytics and Modelling Lab</li>
           </ul>
         </div>
@@ -149,7 +219,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </DotGridBackground>
   );
 }
 
@@ -162,15 +232,30 @@ function About() {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen bg-white p-8">
+    <DotGridBackground 
+      approach="css"
+      dotSize={1}
+      spacing={20}
+      dotColor="#9ca3af"
+      className="min-h-screen bg-white p-8"
+    >
       {/* Navigation */}
       <nav className="flex justify-between items-center mb-16">
-        <h2 
-          onClick={() => navigate('/')} 
-          className="text-2xl text-[#2D1810] hover:font-bold transition-all cursor-pointer"
-        >
-          Adriel De Vera
-        </h2>
+        <div className="relative group">
+          <OvalGradientBackground 
+            colors={['#ff7f50', '#ff6bd6', '#ffe08a']}
+            width="200px"
+            height="80px"
+            opacity={0.9}
+            className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          />
+          <h2 
+            onClick={() => navigate('/')} 
+            className="relative z-10 text-2xl text-[#2D1810] hover:font-bold transition-all cursor-pointer px-4 py-2"
+          >
+            Adriel De Vera
+          </h2>
+        </div>
       </nav>
 
       {/* Bento Box Photo Grid - Responsive */}
@@ -219,41 +304,43 @@ function About() {
   <h1 className="text-6xl font-bold text-[#2D1810] mb-8">Welcome Back!</h1>
   
   <div className="space-y-8 text-[#4D2810]">
-    <p className="text-xl leading-relaxed">
-      Adriel here, a Management Engineering student at uWaterloo with experience in software architecture, distributed systems, and full-stack development. 
-      I’m passionate about creating user-centric solutions at the intersection of people, software, and design while advocating for representation for minorities in tech, particularly the Filipino community.
-    </p>
+    <TextBlock>
+      <p className="text-xl leading-relaxed">
+        Adriel here, a Management Engineering student at uWaterloo with experience in software architecture, distributed systems, and full-stack development. 
+        I'm passionate about creating user-centric solutions at the intersection of people, software, and design while advocating for representation for minorities in tech, particularly the Filipino community.
+      </p>
+    </TextBlock>
     
-    <div>
+    <TextBlock>
       <h2 className="text-2xl font-bold text-[#2D1810] mb-4">Experience</h2>
       <ul className="list-disc list-inside text-xl leading-relaxed">
         <li>Software Engineer @ Replicant AI</li>
         <li>Software Engineer @ Raytheon Technologies</li>
         <li>Systems Engineer @ Multimatic Inc</li>
       </ul>
-    </div>
+    </TextBlock>
 
-    <div>
+    <TextBlock>
       <h2 className="text-2xl font-bold text-[#2D1810] mb-4">Current Obsessions</h2>
       <ul className="list-disc list-inside text-xl leading-relaxed">
-        <li>Training for a Triathlon</li>
-        <li>Staying organized with Personal Knowledge Management Systems</li>
-        <li>Avid Sticker Collector</li>
+        <li>Training for a Half Ironman</li>
+        <li>Traveling to Asia</li>
+        <li>AI-Powered Productivity</li>
       </ul>
-    </div>
+    </TextBlock>
 
-    <div>
+    <TextBlock>
       <h2 className="text-2xl font-bold text-[#2D1810] mb-4">Side Quests</h2>
       <ul className="list-disc list-inside text-xl leading-relaxed">
-        <li>Founded the uWaterloo Filipino Student Assoc (+400 members)</li>
-        <li>uWaterloo Engineering Mentor + Ambassador</li>
-        <li>Received the Engineering Society Leadership Excellence Award</li>
+        <li>Founder of uWaterloo Filipino Student Assoc (+400 members)</li>
+        <li>uWaterloo Engineering Mentor + Ambassador (200+ Mentees)</li>
+        <li>Engineering Society Leadership Excellence Award Recipient</li>
       </ul>
-    </div>
+    </TextBlock>
   </div>
 </div>
 
-    </div>
+    </DotGridBackground>
   );
 }
 
